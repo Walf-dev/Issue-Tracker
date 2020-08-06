@@ -1,0 +1,4 @@
+UserAgent: '*',
+CrawlDelay: '5', 
+Sitemap:'https://wagni-issue-tracker-app.glitch.me/sitemap.xml',
+Sitemap:'https://wagni-issue-tracker-app.glitch.me/robots.txt'
