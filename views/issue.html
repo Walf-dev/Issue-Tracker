@@ -1,36 +1,78 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Welcome to HyperDev!</title>
-    <meta name="description" content="A cool thing made with HyperDev">
-    <link id="favicon" rel="icon" href="https://hyperdev.com/favicon-app.ico" type="image/x-icon">
+    <title>Wagni | Issue-Tracker</title>
+    <link rel="alternate" title="Sitemap" hreflang="en" href="https://wagni-issue-tracker-app.glitch.me/apitest" />
+    <link rel="alternate" title="Sitemap" hreflang="en" href="https://wagni-issue-tracker-app.glitch.me/sitemap.xml" />
+    <meta name="description" content="issue tracker">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/public/style.css">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://wagni-issue-tracker-app.glitch.me/sitemap.xml" />
+       
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    
+    <link rel="stylesheet" href="../public/style.css">
+    
   </head>
   <body>
+    <section class="container">
     <header>
-      <h1 id='projectTitle'></h1>
+      <h1 id="projectTitle" class="text-center">.</h1>
+      
     </header>
-    <center>
-      <div id='submitNewIssue'>
+      <div id="submitNewIssue">
+        <p>Tips: <code style="color: #ff6600;">To view other project issues enter your project in the address bar(https://wagni-issue-tracker-app.glitch.me/your_porject_name_here)</code></p>
         <br>
-        <h3>Submit a new issue:</h3>
-        <form id="newIssue" method="post" action="/api/">
-          <input type="text" name="issue_title" placeholder="*Title" style="width: 320px; margin-bottom: 3px;" required=''><br>
-          <textarea type="text" name="issue_text" placeholder="*Text" style="width: 320px; height: 100px;" required=''></textarea><br>
-          <input type="text" name="created_by" placeholder="*Created by" style="width: 100px" required=''>
-          <input type="text" name="assigned_to" placeholder="(opt)Assigned to" style="width: 100px">
-          <input type="text" name="status_text" placeholder="(opt)Status text" style="width: 100px"><br>
-          <button type="submit">Submit Issue</button>
+        <a href="https://wagni-issue-tracker-app.glitch.me/" class="btn btn-info">Home</a>
+        <button data-toggle="collapse" data-target="#newIssue" class="btn btn-primary">Submit new issue</button>
+        <a href="https://wagni-issue-tracker-app.glitch.me/" class="btn btn-warning">Update issue</a>
+        <br>
+        <br>
+        
+        <form id="newIssue" method="post" action="/api/" class="collapse">
+          <div class="form-group">
+          <label for ="new_issue_title">Issue title:</label>
+          <input id="new_issue_title" type="text" name="issue_title" placeholder="*Title" class="form-control" required="">
+          </div>
+          
+          
+          <div class="form-group">
+          <label for="new_issue_text">Issue text:</label>
+          <textarea id="new_issue_text" name="issue_text" placeholder="*Text" class="form-control" rows="5" required=""></textarea>
+          </div>
+          
+          <div class="form-row">
+          <div class="form-group col">
+          <label for="new_created_by">Created by:</label>
+          <input id="new_created_by" type="text" name="created_by" placeholder="*Created by" class="form-control" required="">
+          </div>
+          
+          <div class="form-group col">
+          <label for="new_assigned_to">Assigned To:</label>
+          <input id="new_assigned_to" type="text" name="assigned_to" placeholder="(opt)Assigned to" class="form-control">
+          </div>
+          
+          <div class="form-group col">
+          <label for="new_status_text">Status text:</label>
+          <input id="new_status_text" type="text" name="status_text" placeholder="(opt)Status text" class="form-control">
+          </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit Issue</button>
         </form>
+        
       </div>
+      <hr>
+      <div id="issueDisplay"></div>
       
-      <div id='issueDisplay'></div>
+      <footer>
+      </footer>
       
-      <hr style='margin: 50px; margin-top: 200px'>
-    </center>
+    </section>
+
     
     <script src="https://code.jquery.com/jquery-2.2.1.min.js"
             integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
@@ -39,36 +81,49 @@
       $(function() {
         var currentProject = window.location.pathname.replace(/\//g, "");;
         var url = "/api/issues/"+currentProject;
-        $('#projectTitle').text('All issues for: '+currentProject)
+        $('#projectTitle').html('All issues for: <code>'+currentProject+'</code>');
+        
         $.ajax({
           type: "GET",
           url: url,
-          success: function(data)
-          {
+          success: function(data){
+            let result = JSON.stringify(data)       
+            
             var issues= [];
             data.forEach(function(ele) {
               console.log(ele);
               var openstatus;
               (ele.open) ? openstatus = 'open' : openstatus = 'closed';
+              let close;
+              (ele.open) ? close = 'Close' : close = "";
+              
+              
               var single = [
-                '<div class="issue '+openstatus+'">',
-                '<p class="id">id: '+ele._id+'</p>',
+                '<div class="issue shadow '+openstatus+'">',                
                 '<h3>'+ele.issue_title+' -  ('+openstatus+')</h3>',
+                '<p class="id"><b>Issue id#</b> '+ele._id+'</p>',
                 '<br>',
                 '<p>'+ele.issue_text+'</p>',
                 '<p>'+ele.status_text+'</p>',
                 '<br>',
                 '<p class="id"><b>Created by:</b> '+ele.created_by+'  <b>Assigned to:</b> '+ele.assigned_to,
-                '<p class="id"><b>Created on:</b> '+ele.created_on+'  <b>Last updated:</b> '+ele.updated_on,
-                '<br><a href="#" class="closeIssue" id="'+ele._id+'">close?</a> <a href="#" class="deleteIssue" id="'+ele._id+'">delete?</a>',
+                '<p class="id"><b>Created on:</b> '+new Date(ele.created_on).toDateString()+'  <b>Last updated:</b> '+new Date(ele.updated_on).toDateString(),
+                '<br><br><a href="#" class="closeIssue" id="'+ele._id+'">'+close+'</a> <a href="#" class="deleteIssue" id="'+ele._id+'">Delete</a>',
                 '</div>'
                 
               ];
               issues.push(single.join(''));
+              
             });
-            $('#issueDisplay').html(issues.join(''));
+      
+           $('#issueDisplay').html(issues.join('')); 
+           
           }
         });
+        
+        
+        
+        
         
         $('#newIssue').submit(function(e){
           e.preventDefault();
@@ -77,9 +132,12 @@
             type: "POST",
             url: url,
             data: $(this).serialize(),
-            success: function(data) { window.location.reload(true); }
+            success: function(data) { window.location.reload(true); console.log(data) }
           });
         });
+        
+        
+        
         
         $('#issueDisplay').on('click','.closeIssue', function(e) {
           var url = "/api/issues/"+currentProject;
@@ -87,17 +145,22 @@
             type: "PUT",
             url: url,
             data: {_id: $(this).attr('id'), open: false},
-            success: function(data) { alert(data); window.location.reload(true); }
+            success: function(data) { alert("Issue has been closed!"); window.location.reload(true); }            
           });
           e.preventDefault();
         });
+        
+        
+        
+        
         $('#issueDisplay').on('click','.deleteIssue', function(e) {
           var url = "/api/issues/"+currentProject;
           $.ajax({
             type: "DELETE",
             url: url,
             data: {_id: $(this).attr('id')},
-            success: function(data) { alert(data); window.location.reload(true); }
+            success: function(data) { alert("Issue has been deleted!"); window.location.reload(true); }
+            
           });
           e.preventDefault();
         });
