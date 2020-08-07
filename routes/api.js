@@ -16,7 +16,7 @@ const shortid = require("shortid");
 
 module.exports = function (app, db) {
   
-  const issueBase = db.db("test").collection("issues");    
+  const issueBase = db.db("issuestracker").collection("issues");    
 
   app.route('/api/issues/:project')
   

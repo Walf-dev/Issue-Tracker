@@ -1,8 +1,8 @@
 {
-  "name": "wagni-issue-tracker",
-  "author": "wagni",
+  "name": "issue-tracker-app",
+  "author": "thetradecoder",
   "version": "0.0.1",
-  "description": "Product Issue Tracker",
+  "description": "Issue Tracket App",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -14,9 +14,9 @@
     "chai": "^4.2.0",
     "mongodb": "^3.5.9",
     "chai-http": "^4.3.0",
-    "mocha": "^8.1.1",
+    "mocha": "^8.0.1",
     "zombie": "^6.1.4",
-    "helmet": "^4.0.0",
+    "helmet": "^3.23.3",
     "shortid": "^2.2.15",
     "express-robots-txt": "^0.4.1"
   },
@@ -25,14 +25,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Walf-dev/Issue-Tracker"
+    "url": "https://glitch.com/edit/#!/fcc-issue-tracker-thetradecoder"
   },
   "keywords": [
-    "issue-tracker",
     "node",
-    "bootstrap",
-    "express",
-    "wagni"
+    "thetradecoder",
+    "express"
   ],
   "license": "MIT"
 }
