@@ -2,15 +2,14 @@
   box-sizing:border-box;
 }
 *{
-  color:#595959;
-}
-
-body{
-  background-color: #f2f2f2;
+  color:#333333;
 }
 
 html {
   scroll-behavior: smooth;
+}
+body{
+  background-color: #ebebe0;
 }
 header{
   padding-top:2rem;
